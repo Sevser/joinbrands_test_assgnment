@@ -17,5 +17,6 @@ module.exports = {
     'max-classes-per-file': 'off',
     'no-underscore-dangle': 'off',
     '@typescript-eslint/ban-ts-ignore': 'off',
+    'max-len': 'off',
   },
 };

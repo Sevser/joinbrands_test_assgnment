@@ -32,8 +32,6 @@ class UserManager {
   }
 
   user: any;
-
-  _user: any;
 }
 
 const userManager = new UserManager();
