@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import userManager from '@/utills/UserManager';
 import Home from '../views/Home.vue';
 
 const routes: Array<RouteRecordRaw> = [
@@ -37,7 +38,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/profile',
     name: 'Profile',
-    component: () => import('../views/About.vue'),
+    component: () => import('../views/Profile.vue'),
     meta: {
       private: true,
     },
@@ -54,21 +55,14 @@ const routes: Array<RouteRecordRaw> = [
     path: '/sign-out',
     name: 'SignOut',
     redirect: () => {
-      console.log('log off');
-      // the function receives the target route as the argument
-      // we return a redirect path/location here.
+      userManager.logoff();
       return { name: 'Home' };
     },
   },
   {
     path: '/(.*)',
     name: '404',
-    redirect: () => {
-      console.log('404');
-      // the function receives the target route as the argument
-      // we return a redirect path/location here.
-      return { name: 'Home' };
-    },
+    redirect: () => ({ name: 'Home' }),
   },
 ];
 
@@ -78,11 +72,11 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(to);
   if (!to.matched.length) {
     next({ name: 'Home' });
   }
-  if (to.meta.private) {
+  console.log(userManager.user, userManager.user);
+  if (to.meta.private && !userManager.user) {
     next({ name: 'SignIn' });
   }
   next();

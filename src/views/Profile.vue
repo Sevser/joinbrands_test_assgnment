@@ -2,10 +2,10 @@
   <div class="profile-container">
     <div class="body">
       <div>
-        username
+        {{ username }}
       </div>
       <div>
-        email
+        {{ email }}
       </div>
       <router-link to="/change-password">Change password</router-link>
       <router-link to="/sign-out">SignOut</router-link>
@@ -15,19 +15,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import UiInput from '@/components/UiInput.vue';
-import UiButton from '@/components/UiButton.vue';
+import userManager from '@/utills/UserManager';
 
 export default defineComponent({
   name: 'SignUp',
-  components: {
-    UiButton,
-    UiInput,
-  },
   data: () => ({
-    userName: '',
-    email: '',
-    password: '',
+    email: userManager.user.email,
+    userName: userManager.user.userName,
   }),
   methods: {
     async validate() {
@@ -50,6 +44,8 @@ export default defineComponent({
   justify-content: center;
   align-content: center;
   & .body {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     max-width: 40rem;
   }
