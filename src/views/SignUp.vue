@@ -10,11 +10,13 @@
         required
         label="email"
         type="email"
+        regex="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
         v-model="email" />
       <UiInput
         required
         label="password"
         type="password"
+        regex="(?=.*?[A-Z])(?=.*?[0-9])"
         v-model="password" />
       <UiButton
         @click="sendForm"
@@ -60,6 +62,7 @@ export default defineComponent({
       try {
         const validations = await Promise.all(this.validationArray);
       } catch (e) {
+        console.error(e);
         return false;
       }
       return true;

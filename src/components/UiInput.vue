@@ -9,7 +9,7 @@
       </div>
     </label>
     <input
-      :value="value"
+      :value="modelValue"
       :type="type"
       @input="handleInput"/>
   </div>
@@ -27,21 +27,28 @@ export default defineComponent({
       type: String,
       default: 'text',
     },
-    value: [Number, String],
+    modelValue: [Number, String],
     required: Boolean,
+    regex: String,
   },
+  emits: ['update:modelValue'],
   data: () => ({
     error: false,
   }),
   methods: {
     handleInput($event) {
-      this.$emit('input', $event);
+      this.$emit('update:modelValue', $event.target.value);
       this.error = false;
     },
     onSave() {
       this.error = false;
       this.$formBus.emit('input:save', new Promise((resolve, reject) => {
-        if (this.required && (this.value === undefined || this.value === null)) {
+        if (this.required && (this.modelValue === undefined || this.modelValue === null)) {
+          reject(new Error(`${this.label} required`));
+          this.error = true;
+        }
+        if (this.regex && this.regex.length && !(new RegExp(this.regex)).test(this.modelValue)) {
+          console.log(this.regex, !(new RegExp(this.regex)).test(this.modelValue), this.modelValue);
           reject(new Error(`error in ${this.label} field`));
           this.error = true;
         }
