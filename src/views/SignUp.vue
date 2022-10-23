@@ -31,6 +31,7 @@
 import { defineComponent } from 'vue';
 import UiInput from '@/components/UiInput.vue';
 import UiButton from '@/components/UiButton.vue';
+import userManager from '@/utills/UserManager';
 
 export default defineComponent({
   name: 'SignUp',
@@ -60,23 +61,28 @@ export default defineComponent({
       this.wait();
       this.$formBus.off('input:save', this.handleSaveEvent.bind(this));
       try {
-        const validations = await Promise.all(this.validationArray);
-        console.log(validations);
+        await Promise.all(this.validationArray);
       } catch (e) {
         console.error(e);
         return false;
       }
       return true;
     },
-    async sendForm() {
+    async sendForm(event: Event) {
       const validation = await this.validate();
       if (validation) {
+        const result = await userManager.signUp({
+          email: this.email,
+          password: this.password,
+          userName: this.userName,
+        });
         const res = await this.$router.push({
-          name: 'Profile',
+          name: 'SignIn',
         });
       } else {
         console.log('error');
       }
+      return event;
     },
     handleSaveEvent(pending: any) {
       this.validationArray.push(pending);

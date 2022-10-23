@@ -1,7 +1,7 @@
 <template>
   <button
     class="button"
-    @click="$emit('click')">
+    @click="onClick">
     <slot></slot>
   </button>
 </template>
@@ -11,6 +11,20 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'UiButton',
+  methods: {
+    onClick(event: Event) {
+      if (event.stopImmediatePropagation) {
+        event.stopImmediatePropagation();
+      }
+      if (event.stopPropagation) {
+        event.stopPropagation();
+      }
+      if (event.preventDefault) {
+        event.preventDefault();
+      }
+      this.$emit('click');
+    },
+  },
 });
 
 </script>

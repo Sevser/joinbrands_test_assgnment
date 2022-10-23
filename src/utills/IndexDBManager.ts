@@ -1,26 +1,46 @@
 export class IndexDBManager {
   private DBOpenRequest: any;
 
-  private db: any;
+  public db: any;
 
   public hasError: boolean;
 
   public pending: boolean;
 
   constructor() {
-    this.DBOpenRequest = window.indexedDB.open('userList', 1);
+    this.DBOpenRequest = window.indexedDB.open('users', 1);
     this.hasError = false;
     this.pending = true;
-    this.DBOpenRequest.onerror = (event: any) => {
+    this.DBOpenRequest.onerror = (event: any): void => {
       console.error(event);
       this.hasError = true;
       this.pending = false;
     };
-    this.DBOpenRequest.onsuccess = (event: any) => {
+    this.DBOpenRequest.onsuccess = (event: any): void => {
       console.log('Database initialised.');
       this.db = this.DBOpenRequest.result;
       this.pending = false;
     };
+    this.DBOpenRequest.onupgradeneeded = (event: any): void => {
+      const db = event.target.result;
+
+      db.onerror = (event1: any) => {
+        console.error(event1);
+      };
+
+      const objectStore = db.createObjectStore('userList', { keyPath: 'id', autoIncrement: true });
+      objectStore.createIndex('userName', 'userName', { unique: true });
+      objectStore.createIndex('email', 'email', { unique: true });
+      objectStore.createIndex('password', 'password', { unique: false });
+      objectStore.createIndex('registerCode', 'registerCode', { unique: false });
+      objectStore.createIndex('resetPasswordCode', 'resetPasswordCode', { unique: false });
+    };
+
+    window.addEventListener('beforeunload', () => {
+      if (!this.pending && !this.hasError) {
+        this.db.close();
+      }
+    });
   }
 }
 
