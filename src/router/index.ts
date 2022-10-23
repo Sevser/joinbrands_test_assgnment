@@ -72,4 +72,17 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  if (!to.matched.length) {
+    next({ name: 'Home' });
+    return;
+  }
+  console.log(userManager.user, userManager.user);
+  if (to.meta.private && !userManager.user) {
+    next({ name: 'SignIn' });
+    return;
+  }
+  next();
+});
+
 export default router;

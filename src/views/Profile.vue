@@ -2,7 +2,7 @@
   <div class="profile-container">
     <div class="body">
       <div>
-        {{ username }}
+        {{ userName }}
       </div>
       <div>
         {{ email }}

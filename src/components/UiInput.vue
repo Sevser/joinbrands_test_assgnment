@@ -48,19 +48,19 @@ export default defineComponent({
       }
     },
     onSave() {
-      this.error = false;
       this.$formBus.emit('input:save', new Promise((resolve, reject) => {
+        this.error = false;
         if (this.required && (this.modelValue === undefined || this.modelValue === null)) {
-          reject(new Error(`${this.label} required`));
           this.error = true;
+          reject(new Error(`${this.label} required`));
         }
         if (this.modelValue !== undefined
           && this.regex
           && this.regex.length
           && !(new RegExp(this.regex)).test(this.modelValue.toString())) {
           console.log(this.regex, !(new RegExp(this.regex)).test(this.modelValue.toString()), this.modelValue);
-          reject(new Error(`error in ${this.label} field`));
           this.error = true;
+          reject(new Error(`error in ${this.label} field`));
         }
         resolve(true);
       }));

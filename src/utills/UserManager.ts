@@ -1,7 +1,6 @@
-interface IUser {
-  userName: string,
-  email: string,
-}
+import { IUser } from '@/interfaces/IUser';
+import { IUserRegister } from '@/interfaces/IUserRegister';
+import indexDBManager from './IndexDBManager';
 
 class User implements IUser {
   public email: string;
@@ -15,8 +14,17 @@ class User implements IUser {
 }
 
 class UserManager {
+  private dbManager: any;
+
+  public user: any;
+
   constructor() {
+    this.dbManager = indexDBManager;
     this.user = null;
+  }
+
+  static async signUp(user: IUserRegister) {
+    console.log(user);
   }
 
   async login({ email, password }: {email: string, password: string}) {
@@ -28,8 +36,6 @@ class UserManager {
     console.log('logoff');
     this.user = null;
   }
-
-  user: any;
 }
 
 const userManager = new UserManager();
