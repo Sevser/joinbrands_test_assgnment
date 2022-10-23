@@ -42,7 +42,7 @@ export default defineComponent({
     userName: '',
     email: '',
     password: '',
-    validationArray: [],
+    validationArray: new Array<any>(),
     validating: false,
   }),
   methods: {
@@ -61,6 +61,7 @@ export default defineComponent({
       this.$formBus.off('input:save', this.handleSaveEvent.bind(this));
       try {
         const validations = await Promise.all(this.validationArray);
+        console.log(validations);
       } catch (e) {
         console.error(e);
         return false;

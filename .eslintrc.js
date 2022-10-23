@@ -18,5 +18,6 @@ module.exports = {
     'no-underscore-dangle': 'off',
     '@typescript-eslint/ban-ts-ignore': 'off',
     'max-len': 'off',
+    'vue/multi-word-component-names': 'off',
   },
 };

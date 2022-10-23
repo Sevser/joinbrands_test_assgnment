@@ -1,16 +1,14 @@
-import { computed, reactive } from 'vue';
-
 interface IUser {
   userName: string,
   email: string,
 }
 
 class User implements IUser {
-  public email: any;
+  public email: string;
 
-  public userName: any;
+  public userName: string;
 
-  constructor(email, userName) {
+  constructor(email:string, userName:string) {
     this.userName = userName;
     this.email = email;
   }
@@ -21,7 +19,7 @@ class UserManager {
     this.user = null;
   }
 
-  async login({ email, password }) {
+  async login({ email, password }: {email: string, password: string}) {
     console.log('login');
     this.user = new User(email, password);
   }

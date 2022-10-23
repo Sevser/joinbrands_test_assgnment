@@ -3,12 +3,12 @@ class IndexDBManager {
     this.DBOpenRequest = window.indexedDB.open('userList', 1);
     this.hasError = false;
     this.pending = true;
-    this.DBOpenRequest.onerror = (event) => {
+    this.DBOpenRequest.onerror = (event: any) => {
       console.error(event);
       this.hasError = true;
       this.pending = false;
     };
-    this.DBOpenRequest.onsuccess = (event) => {
+    this.DBOpenRequest.onsuccess = (event: any) => {
       console.log('Database initialised.');
       this.db = this.DBOpenRequest.result;
       this.pending = false;

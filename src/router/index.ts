@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import userManager from '@/utills/UserManager';
-import Home from '../views/Home.vue';
+import Home from '@/views/Home.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/sign-up',
     name: 'SignUp',
-    component: () => import('../views/SignUp.vue'),
+    component: () => import('@/views/SignUp.vue'),
     meta: {
       private: false,
     },
@@ -22,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/sign-in',
     name: 'SignIn',
-    component: () => import('../views/SignIn.vue'),
+    component: () => import('@/views/SignIn.vue'),
     meta: {
       private: false,
     },
@@ -31,7 +31,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/lost-password',
     name: 'LostPassword',
     props: (route) => ({ email: route.query.email, code: route.query.code }),
-    component: () => import('../views/LostPassword.vue'),
+    component: () => import('@/views/LostPassword.vue'),
     meta: {
       private: false,
     },
@@ -39,7 +39,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/profile',
     name: 'Profile',
-    component: () => import('../views/Profile.vue'),
+    component: () => import('@/views/Profile.vue'),
     meta: {
       private: true,
     },
@@ -47,7 +47,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/change-password',
     name: 'ChangePassword',
-    component: () => import('../views/About.vue'),
+    component: () => import('@/views/About.vue'),
     meta: {
       private: false,
     },
@@ -70,17 +70,6 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-});
-
-router.beforeEach((to, from, next) => {
-  if (!to.matched.length) {
-    next({ name: 'Home' });
-  }
-  console.log(userManager.user, userManager.user);
-  if (to.meta.private && !userManager.user) {
-    next({ name: 'SignIn' });
-  }
-  next();
 });
 
 export default router;

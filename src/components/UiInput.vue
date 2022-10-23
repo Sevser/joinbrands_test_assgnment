@@ -1,22 +1,26 @@
 <template>
   <div class="ui-input" :class="{ error }">
-    <label>
-      {{ label }}
-      <div
-        v-if="required"
-        class="required">
-        *
+    <label :for="guid">
+      <div class="header">
+        {{ label }}
+        <div
+          v-if="required"
+          class="required">
+          *
+        </div>
       </div>
+      <input
+        :id="guid"
+        :value="modelValue"
+        :type="type"
+        @input="handleInput"/>
     </label>
-    <input
-      :value="modelValue"
-      :type="type"
-      @input="handleInput"/>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { createGUID } from '@/utills/index';
 
 export default defineComponent({
   name: 'UiInput',
@@ -34,11 +38,14 @@ export default defineComponent({
   emits: ['update:modelValue'],
   data: () => ({
     error: false,
+    guid: createGUID(),
   }),
   methods: {
-    handleInput($event) {
-      this.$emit('update:modelValue', $event.target.value);
-      this.error = false;
+    handleInput($event: any) {
+      if ($event.target !== null) {
+        this.$emit('update:modelValue', $event.target.value);
+        this.error = false;
+      }
     },
     onSave() {
       this.error = false;
@@ -47,8 +54,11 @@ export default defineComponent({
           reject(new Error(`${this.label} required`));
           this.error = true;
         }
-        if (this.regex && this.regex.length && !(new RegExp(this.regex)).test(this.modelValue)) {
-          console.log(this.regex, !(new RegExp(this.regex)).test(this.modelValue), this.modelValue);
+        if (this.modelValue !== undefined
+          && this.regex
+          && this.regex.length
+          && !(new RegExp(this.regex)).test(this.modelValue.toString())) {
+          console.log(this.regex, !(new RegExp(this.regex)).test(this.modelValue.toString()), this.modelValue);
           reject(new Error(`error in ${this.label} field`));
           this.error = true;
         }
@@ -76,8 +86,17 @@ export default defineComponent({
   }
   & label {
     display: flex;
-    & .required {
-     color: red;
+    flex-direction: column;
+    align-items: flex-start;
+    & .header {
+      display: flex;
+      & .required {
+        padding-left: 10px;
+        color: red;
+      }
+    }
+    & input {
+      width: 100%;
     }
   }
 }

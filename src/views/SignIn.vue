@@ -35,7 +35,8 @@ export default defineComponent({
   data: () => ({
     email: '',
     password: '',
-    validationArray: [],
+    validationArray: new Array<any>(),
+    validating: false,
   }),
   methods: {
     async wait() {

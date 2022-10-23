@@ -12,7 +12,7 @@
     <h2>
       {{ title }}
     </h2>
-    <router-view/>
+  <router-view/>
   </div>
 </template>
 <script lang="ts">
