@@ -16,7 +16,7 @@
         required
         label="password"
         type="password"
-        regex="(?=.*?[A-Z])(?=.*?[0-9])"
+        regex="^[^\s]{6}$"
         v-model="password" />
       <div
        class="error-container"

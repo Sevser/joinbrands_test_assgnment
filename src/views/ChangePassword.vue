@@ -11,7 +11,7 @@
         required
         label="new password"
         type="password"
-        regex="(?=.*?[A-Z])(?=.*?[0-9])"
+        regex="^[^\s]{6}$"
         v-model="newPassword"
       />
       <UiButton @click="sendForm"> Update password </UiButton>
