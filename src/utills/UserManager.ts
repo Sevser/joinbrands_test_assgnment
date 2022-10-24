@@ -1,15 +1,18 @@
 import { IUser } from '@/interfaces/IUser';
+import { IUserLogin } from '@/interfaces/IUserLogin';
+import userController from './UserController';
 
 class User implements IUser {
   public email: string;
 
   public userName: string;
 
-  public activated?: boolean;
+  public password: string;
 
-  constructor(email: string, userName: string) {
-    this.userName = userName;
-    this.email = email;
+  constructor(user: IUser) {
+    this.userName = user.userName;
+    this.email = user.email;
+    this.password = user.password;
   }
 }
 
@@ -20,9 +23,9 @@ class UserManager {
     this.user = null;
   }
 
-  async login({ email, password }: { email: string, password: string }) {
-    console.log('login');
-    this.user = new User(email, password);
+  async login(user: IUserLogin) {
+    console.log('login', this.user);
+    console.log(await userController.signIn(user));
   }
 
   async logoff() {

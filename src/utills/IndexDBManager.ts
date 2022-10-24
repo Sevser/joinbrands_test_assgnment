@@ -36,7 +36,8 @@ export class IndexDBManager {
         console.error(event1);
       };
 
-      const objectStore = db.createObjectStore('userList', { keyPath: 'id', autoIncrement: true });
+      const keyPath = ['email', 'userName'];
+      const objectStore = db.createObjectStore('userList', { keyPath, unique: false });
       objectStore.createIndex('userName', 'userName', { unique: true });
       objectStore.createIndex('email', 'email', { unique: true });
       objectStore.createIndex('password', 'password', { unique: false });
