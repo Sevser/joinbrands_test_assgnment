@@ -5,6 +5,7 @@
         required
         label="new password"
         type="password"
+        regex="(?=.*?[A-Z])(?=.*?[0-9])"
         v-model="password" />
       <UiButton
         @click="sendForm"
@@ -27,12 +28,34 @@ export default defineComponent({
     UiInput,
   },
   data: () => ({
+    validationArray: new Array<any>(),
+    validating: false,
     password: '',
   }),
   methods: {
+    async wait() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true);
+        }, 250);
+      });
+    },
     async validate() {
-
+      this.validating = true;
+      this.$formBus.on('input:save', this.handleSaveEvent.bind(this));
+      this.$formBus.emit('save');
+      this.wait();
+      this.$formBus.off('input:save', this.handleSaveEvent.bind(this));
+      try {
+        await Promise.all(this.validationArray);
+      } catch (e) {
+        console.error(e);
+        return false;
+      }
       return true;
+    },
+    handleSaveEvent(pending: any) {
+      this.validationArray.push(pending);
     },
     async sendForm() {
       const validation = await this.validate();

@@ -20,7 +20,7 @@ export default class UserRegister implements IUserRegister {
     if (user.activated !== undefined) {
       this.activated = user.activated;
     } else {
-      this.activated = false;
+      this.activated = true;
     }
     if (user.registerCode !== undefined) {
       this.registerCode = user.registerCode;
