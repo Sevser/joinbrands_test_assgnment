@@ -47,9 +47,9 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/change-password',
     name: 'ChangePassword',
-    component: () => import('@/views/About.vue'),
+    component: () => import('@/views/ChangePassword.vue'),
     meta: {
-      private: false,
+      private: true,
     },
   },
   {
@@ -77,7 +77,6 @@ router.beforeEach((to, from, next) => {
     next({ name: 'Home' });
     return;
   }
-  console.log(userManager.user, userManager.user);
   if (to.meta.private && !userManager.user) {
     next({ name: 'SignIn' });
     return;

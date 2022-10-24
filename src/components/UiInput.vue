@@ -13,6 +13,7 @@
         :id="guid"
         :value="modelValue"
         :type="type"
+        @paste="handleInput"
         @input="handleInput"/>
     </label>
   </div>

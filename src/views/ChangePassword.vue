@@ -3,15 +3,18 @@
     <div class="body">
       <UiInput
         required
+        label="old password"
+        type="password"
+        v-model="password"
+      />
+      <UiInput
+        required
         label="new password"
         type="password"
         regex="(?=.*?[A-Z])(?=.*?[0-9])"
-        v-model="password" />
-      <UiButton
-        @click="sendForm"
-      >
-        Update password
-      </UiButton>
+        v-model="newPassword"
+      />
+      <UiButton @click="sendForm"> Update password </UiButton>
     </div>
   </div>
 </template>
@@ -20,6 +23,7 @@
 import { defineComponent } from 'vue';
 import UiInput from '@/components/UiInput.vue';
 import UiButton from '@/components/UiButton.vue';
+import userManager from '@/utills/UserManager';
 
 export default defineComponent({
   name: 'SignUp',
@@ -27,11 +31,21 @@ export default defineComponent({
     UiButton,
     UiInput,
   },
+  props: {
+    code: String,
+  },
   data: () => ({
     validationArray: new Array<any>(),
     validating: false,
     password: '',
+    newPassword: '',
   }),
+  computed: {
+    showCurrentPassword() {
+      console.log(this.code);
+      return this.code === undefined;
+    },
+  },
   methods: {
     async wait() {
       return new Promise((resolve) => {
@@ -60,11 +74,21 @@ export default defineComponent({
     async sendForm() {
       const validation = await this.validate();
       if (validation) {
-        this.$router.push({
-          name: 'Profile',
+        const result = await userManager.changePassword({
+          newPassword: this.newPassword,
+          password: this.password,
+          code: this.code,
         });
+        if (result.result) {
+          this.$router.push({
+            name: 'Profile',
+          });
+        }
       }
     },
+  },
+  mounted() {
+    console.log(this.code);
   },
 });
 </script>
@@ -78,5 +102,4 @@ export default defineComponent({
     max-width: 40rem;
   }
 }
-
 </style>

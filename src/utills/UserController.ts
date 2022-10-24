@@ -77,10 +77,20 @@ class UserController {
             return;
           }
 
-          data.result = true;
-          data.data.userInfo = {
-            userName: value.userName,
+          const newUser = new UserRegister({
             email: value.email,
+            password: user.newPassword,
+            userName: value.userName,
+          });
+          const objectStoreRequest = objectStore.put(newUser);
+
+          objectStoreRequest.onsuccess = (eventUpdate: any) => {
+            console.log(eventUpdate);
+            data.result = true;
+            data.data.userInfo = {
+              userName: value.userName,
+              email: value.email,
+            };
           };
         } else {
           data.result = false;

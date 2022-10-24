@@ -2,10 +2,10 @@
   <div class="profile-container">
     <div class="body">
       <div>
-        {{ userName }}
+        userName: {{ userName }}
       </div>
       <div>
-        {{ email }}
+        email: {{ email }}
       </div>
       <router-link to="/change-password">Change password</router-link>
       <router-link to="/sign-out">SignOut</router-link>
@@ -48,6 +48,9 @@ export default defineComponent({
     flex-direction: column;
     width: 100%;
     max-width: 40rem;
+    & a {
+      margin-top: 15px;
+    }
   }
 }
 
