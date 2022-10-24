@@ -1,7 +1,7 @@
 <template>
   <div>
     <UiInput required label="email" v-model="enterEmail" />
-    <UiButton @click="resetPassword"> Восстановить пароль </UiButton>
+    <UiButton @click="resetPassword">Restore password</UiButton>
   </div>
 </template>
 

@@ -10,6 +10,7 @@
         </div>
       </div>
       <input
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         :id="guid"
         :value="modelValue"
         :type="type"
@@ -81,7 +82,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   padding-bottom: 0.25rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   &.error {
     border-bottom: 1px solid red;
   }
@@ -89,8 +90,10 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    text-transform: capitalize;
     & .header {
       display: flex;
+      margin-bottom: 10px;
       & .required {
         padding-left: 10px;
         color: red;
@@ -98,6 +101,7 @@ export default defineComponent({
     }
     & input {
       width: 100%;
+      padding: 8px;
     }
   }
 }
