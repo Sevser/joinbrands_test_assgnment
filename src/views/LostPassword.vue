@@ -22,13 +22,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, inject } from 'vue';
 import NoCodeNoEmail from '@/components/LostPassword/NoCodeNoEmail.vue';
 import userController from '@/utills/UserController';
 import userManager from '@/utills/UserManager';
 import UiInput from '@/components/UiInput.vue';
 import UiButton from '@/components/UiButton.vue';
-import { createGUID } from '@/utills';
+import { createGUID, wait } from '@/utills';
 
 export default defineComponent({
   name: 'SignUp',
@@ -73,19 +73,10 @@ export default defineComponent({
     },
   },
   methods: {
-    async wait() {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true);
-        }, 250);
-      });
-    },
     async validate() {
-      this.validating = true;
-      this.$formBus.on('input:save', this.handleSaveEvent.bind(this));
-      this.$formBus.emit('save');
-      this.wait();
-      this.$formBus.off('input:save', this.handleSaveEvent.bind(this));
+      this.validationArray = [];
+      this.$formBus.emit(`${this.formId}save`);
+      await this.wait();
       try {
         await Promise.all(this.validationArray);
       } catch (e) {
@@ -125,6 +116,18 @@ export default defineComponent({
     if (this.hasEmail && !this.hasCode) {
       this.populateCode();
     }
+  },
+  beforeMount() {
+    this.$formBus.on(`${this.formId}input:save`, this.handleSaveEvent.bind(this));
+  },
+  beforeUnmount() {
+    this.$formBus.off(`${this.formId}input:save`, this.handleSaveEvent.bind(this));
+  },
+  setup() {
+    inject('wait');
+    return {
+      wait,
+    };
   },
 });
 </script>

@@ -12,11 +12,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, inject, warn } from 'vue';
 import UiInput from '@/components/UiInput.vue';
 import UiButton from '@/components/UiButton.vue';
 import userManager from '@/utills/UserManager';
-import { createGUID } from '@/utills';
+import { createGUID, wait } from '@/utills';
 
 export default defineComponent({
   name: 'SignUp',
@@ -43,24 +43,13 @@ export default defineComponent({
     },
   },
   methods: {
-    async wait() {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true);
-        }, 250);
-      });
-    },
-    async logIn() {
-      return true;
-    },
     async validate() {
-      this.validating = true;
-      this.$formBus.on('input:save', this.handleSaveEvent.bind(this));
-      this.$formBus.emit('save');
-      this.wait();
-      this.$formBus.off('input:save', this.handleSaveEvent.bind(this));
+      this.validationArray = [];
+      this.errorLabel = '';
+      this.$formBus.emit(`${this.formId}save`);
+      await this.wait();
       try {
-        const validations = await Promise.all(this.validationArray);
+        await Promise.all(this.validationArray);
       } catch (e) {
         console.error(e);
         return false;
@@ -89,6 +78,18 @@ export default defineComponent({
     handleSaveEvent(pending: any) {
       this.validationArray.push(pending);
     },
+  },
+  beforeMount() {
+    this.$formBus.on(`${this.formId}input:save`, this.handleSaveEvent.bind(this));
+  },
+  beforeUnmount() {
+    this.$formBus.off(`${this.formId}input:save`, this.handleSaveEvent.bind(this));
+  },
+  setup() {
+    inject('wait');
+    return {
+      wait,
+    };
   },
 });
 </script>

@@ -29,7 +29,8 @@ class UserController {
       };
 
       const objectStore = transaction.objectStore('userList');
-      const objectStoreRequest = objectStore.add(new UserRegister(user));
+      console.log(new UserRegister(user));
+      const objectStoreRequest = objectStore.put(new UserRegister(user));
 
       objectStoreRequest.onsuccess = (event: any) => {
         console.log(event);

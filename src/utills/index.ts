@@ -6,3 +6,9 @@ export const createQuadriplet = () => {
 export const createGUID = () => `${createQuadriplet()}${createQuadriplet()}-${createQuadriplet()}-${createQuadriplet()}-${createQuadriplet()}-${createQuadriplet()}${createQuadriplet()}${createQuadriplet()}`;
 
 export const createCode = () => `${createQuadriplet()}-${createQuadriplet()}`;
+
+export const wait = async (): Promise<boolean> => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(true);
+  }, 250);
+});
