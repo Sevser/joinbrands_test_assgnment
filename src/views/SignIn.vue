@@ -1,21 +1,12 @@
 <template>
   <div class="sign-in-container">
     <div class="body">
-      <UiInput
-        required
-        label="email"
-        type="email"
-        v-model="email" />
-      <UiInput
-        required
-        label="password"
-        type="password"
-        v-model="password" />
-      <UiButton
-        @click="sendForm"
-        >
-        SignUp
-      </UiButton>
+      <UiInput required label="email" type="email" v-model="email" />
+      <UiInput required label="password" type="password" v-model="password" />
+      <div class="error-container" v-if="showError">
+        {{ errorLabel }}
+      </div>
+      <UiButton @click="sendForm"> SignUp </UiButton>
     </div>
   </div>
 </template>
@@ -37,7 +28,13 @@ export default defineComponent({
     password: '',
     validationArray: new Array<any>(),
     validating: false,
+    errorLabel: '',
   }),
+  computed: {
+    showError() {
+      return !!this.errorLabel.length;
+    },
+  },
   methods: {
     async wait() {
       return new Promise((resolve) => {
@@ -66,14 +63,18 @@ export default defineComponent({
     async sendForm() {
       const validation = await this.validate();
       if (validation) {
-        await userManager.login({
+        const result = await userManager.login({
           email: this.email,
           password: this.password,
         });
-        console.log(this.$router);
-        const res = await this.$router.push({
-          name: 'Profile',
-        });
+        if (!result.result && result.data.message) {
+          this.errorLabel = result.data.message;
+        } else {
+          console.log(this.$router);
+          await this.$router.push({
+            name: 'Profile',
+          });
+        }
       } else {
         console.log('error');
       }
@@ -94,5 +95,4 @@ export default defineComponent({
     max-width: 40rem;
   }
 }
-
 </style>

@@ -1,3 +1,4 @@
+import { IUserControllerResult } from '@/interfaces/IUserControllerResult';
 import { IUserLogin } from '@/interfaces/IUserLogin';
 import { IUserRegister } from '@/interfaces/IUserRegister';
 import UserControllerResult from '@/types/UserControllerResult';
@@ -34,7 +35,7 @@ class UserController {
     });
   }
 
-  async signIn(user: IUserLogin) {
+  async signIn(user: IUserLogin): Promise<IUserControllerResult> {
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(['userList'], 'readwrite');
       const data = new UserControllerResult({ data: {}, result: false });

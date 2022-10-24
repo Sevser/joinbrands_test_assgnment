@@ -1,18 +1,16 @@
-import { IUser } from '@/interfaces/IUser';
+import { IUserControllerResult } from '@/interfaces/IUserControllerResult';
 import { IUserLogin } from '@/interfaces/IUserLogin';
+import { IUserProfile } from '@/interfaces/IUserProfile';
 import userController from './UserController';
 
-class User implements IUser {
+class User implements IUserProfile {
   public email: string;
 
   public userName: string;
 
-  public password: string;
-
-  constructor(user: IUser) {
+  constructor(user: IUserProfile) {
     this.userName = user.userName;
     this.email = user.email;
-    this.password = user.password;
   }
 }
 
@@ -23,9 +21,13 @@ class UserManager {
     this.user = null;
   }
 
-  async login(user: IUserLogin) {
+  async login(user: IUserLogin): Promise<IUserControllerResult> {
     console.log('login', this.user);
-    console.log(await userController.signIn(user));
+    const result = await userController.signIn(user);
+    if (result.result && result.data.userInfo !== undefined) {
+      this.user = new User(result.data.userInfo);
+    }
+    return result;
   }
 
   async logoff() {
