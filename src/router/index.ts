@@ -30,7 +30,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/lost-password',
     name: 'LostPassword',
-    props: (route) => ({ email: route.query.email, code: route.query.code }),
+    props: (route) => {
+      console.log(route);
+      return { email: route.query.email, code: route.query.code };
+    },
     component: () => import('@/views/LostPassword.vue'),
     meta: {
       private: false,

@@ -77,7 +77,6 @@ export default defineComponent({
         const result = await userManager.changePassword({
           newPassword: this.newPassword,
           password: this.password,
-          code: this.code,
         });
         if (result.result) {
           this.$router.push({

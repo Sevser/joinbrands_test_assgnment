@@ -30,7 +30,7 @@ Vue3, Vue-cli, VueRouter, Typescript, sass, yarn
     * If an email address is passed in the URL (/lost-password?email={EMAIL}, display a link
 with a code (/lost-password?code={CODE}) to reset the password (CODE must be stored in
 the local storage for example)
-    * if CODE is received, sign in and redirect to /change-password
+    * if CODE is received, show field for new password
 *   /profile: available only when the user is signed in, else redirect to /sign-in. Shows the user name
 and email, a link to /change-password, and a link to /sign-out
 *   /change-password: available only when signed in, else redirect to /sign-in

@@ -78,6 +78,38 @@ class UserController {
     });
   }
 
+  async getCode(user: IUserPasswordRecovery): Promise<IUserControllerResult> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction(['userList'], 'readwrite');
+      const data = new UserControllerResult({ data: {}, result: false });
+      transaction.oncomplete = (): void => {
+        console.log(data);
+        resolve(data);
+      };
+      transaction.onerror = (event: any): void => {
+        reject(new Error(event.target.error));
+      };
+
+      const objectStore = transaction.objectStore('userList');
+      const index = objectStore.index('email');
+
+      const lowerBound = user.email;
+      const upperBound = user.email;
+      const range = IDBKeyRange.bound(lowerBound, upperBound);
+      const request = index.openCursor(range);
+
+      request.onsuccess = (event: any) => {
+        if (event.target && event.target.result && event.target.result.value) {
+          const { value } = event.target.result;
+          data.data.code = value.resetPasswordCode;
+        } else {
+          data.result = false;
+          data.data.message = 'User wasn`t found';
+        }
+      };
+    });
+  }
+
   async updatePassword(user: IUserUpdatePassword): Promise<IUserControllerResult> {
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(['userList'], 'readwrite');

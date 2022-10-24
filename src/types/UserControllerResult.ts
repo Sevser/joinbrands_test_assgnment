@@ -1,7 +1,7 @@
-import { IUserControllerResult } from '@/interfaces/IUserControllerResult';
+import { IUserControllerResult, IUserControllerResultData } from '@/interfaces/IUserControllerResult';
 
 export default class UserControllerResult implements IUserControllerResult {
-  public data: any;
+  public data: IUserControllerResultData;
 
   public result: boolean;
 

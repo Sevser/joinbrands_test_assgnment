@@ -1,5 +1,5 @@
 export interface IUserUpdatePassword {
-    userName: string,
+    userName?: string,
     email: string;
     password?: string;
     code?: string;

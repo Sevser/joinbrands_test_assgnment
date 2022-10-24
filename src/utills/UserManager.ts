@@ -21,12 +21,23 @@ class UserManager {
     this.user = null;
   }
 
-  async changePassword({ newPassword, code, password }: { newPassword?: string, code?: string, password?: string }): Promise<IUserControllerResult> {
+  async changePassword({ newPassword, password }: { newPassword?: string, password?: string }): Promise<IUserControllerResult> {
     const result = await userController.updatePassword({
       ...this.user,
       newPassword,
       password,
+    });
+    if (result.result && result.data.userInfo !== undefined) {
+      this.user = new User(result.data.userInfo);
+    }
+    return result;
+  }
+
+  async changePasswordWithCode({ code, newPassword, email }: { code: string, newPassword: string, email: string }): Promise<IUserControllerResult> {
+    const result = await userController.updatePassword({
+      email,
       code,
+      newPassword,
     });
     if (result.result && result.data.userInfo !== undefined) {
       this.user = new User(result.data.userInfo);
