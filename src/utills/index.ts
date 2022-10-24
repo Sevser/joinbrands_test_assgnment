@@ -4,3 +4,5 @@ export const createQuadriplet = () => {
 };
 
 export const createGUID = () => `${createQuadriplet()}${createQuadriplet()}-${createQuadriplet()}-${createQuadriplet()}-${createQuadriplet()}-${createQuadriplet()}${createQuadriplet()}${createQuadriplet()}`;
+
+export const createCode = () => `${createQuadriplet()}-${createQuadriplet()}`;

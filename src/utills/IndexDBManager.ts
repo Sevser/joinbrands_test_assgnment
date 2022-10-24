@@ -11,15 +11,23 @@ export class IndexDBManager {
     this.DBOpenRequest = window.indexedDB.open('users', 1);
     this.hasError = false;
     this.pending = true;
+    let resolve: (value: unknown) => void;
+    let reject: (value: unknown) => void;
+    this.db = new Promise((res, rej) => {
+      resolve = res;
+      reject = rej;
+    });
     this.DBOpenRequest.onerror = (event: any): void => {
       console.error(event);
       this.hasError = true;
       this.pending = false;
+      reject(event);
     };
     this.DBOpenRequest.onsuccess = (event: any): void => {
       console.log('Database initialised.');
       this.db = this.DBOpenRequest.result;
       this.pending = false;
+      resolve(this.db);
     };
     this.DBOpenRequest.onupgradeneeded = (event: any): void => {
       const db = event.target.result;
@@ -34,6 +42,7 @@ export class IndexDBManager {
       objectStore.createIndex('password', 'password', { unique: false });
       objectStore.createIndex('registerCode', 'registerCode', { unique: false });
       objectStore.createIndex('resetPasswordCode', 'resetPasswordCode', { unique: false });
+      objectStore.createIndex('activated', 'activated', { unique: false });
     };
 
     window.addEventListener('beforeunload', () => {

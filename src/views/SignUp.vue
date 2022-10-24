@@ -18,11 +18,18 @@
         type="password"
         regex="(?=.*?[A-Z])(?=.*?[0-9])"
         v-model="password" />
+      <div
+       class="error-container"
+       v-if="showError"
+       >
+        {{ errorLabel }}
+      </div>
       <UiButton
         @click="sendForm"
         >
         SignUp
       </UiButton>
+      <router-link class="link-to-sign-in" to="/sign-in">SignIn</router-link>
     </div>
   </div>
 </template>
@@ -31,7 +38,7 @@
 import { defineComponent } from 'vue';
 import UiInput from '@/components/UiInput.vue';
 import UiButton from '@/components/UiButton.vue';
-import userManager from '@/utills/UserManager';
+import userController from '@/utills/UserController';
 
 export default defineComponent({
   name: 'SignUp',
@@ -45,7 +52,13 @@ export default defineComponent({
     password: '',
     validationArray: new Array<any>(),
     validating: false,
+    errorLabel: '',
   }),
+  computed: {
+    showError() {
+      return !!this.errorLabel.length;
+    },
+  },
   methods: {
     async wait() {
       return new Promise((resolve) => {
@@ -71,14 +84,18 @@ export default defineComponent({
     async sendForm(event: Event) {
       const validation = await this.validate();
       if (validation) {
-        const result = await userManager.signUp({
-          email: this.email,
-          password: this.password,
-          userName: this.userName,
-        });
-        const res = await this.$router.push({
-          name: 'SignIn',
-        });
+        try {
+          await userController.signUp({
+            email: this.email,
+            password: this.password,
+            userName: this.userName,
+          });
+          this.$router.push({
+            name: 'SignIn',
+          });
+        } catch (e: any) {
+          this.errorLabel = e.toString();
+        }
       } else {
         console.log('error');
       }
@@ -98,6 +115,12 @@ export default defineComponent({
   & .body {
     width: 100%;
     max-width: 40rem;
+    & .error-container {
+      width: 100%;
+    }
+    & .link-to-sign-in {
+      margin-top: 20px;
+    }
   }
 }
 
