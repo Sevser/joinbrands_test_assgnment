@@ -1,5 +1,7 @@
 # joinbrants_test_assignment
 
+[Preview](https://sevser.github.io/joinbrands_test_assgnment/)
+
 # Links
 [https://www.linkedin.com/in/semyon-evstigneev-981a73164/](https://www.linkedin.com/in/semyon-evstigneev-981a73164/)
 [https://github.com/Sevser](https://github.com/Sevser)

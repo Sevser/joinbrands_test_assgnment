@@ -21,10 +21,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, inject } from 'vue';
 import { createGUID } from '@/utills/index';
 
 export default defineComponent({
+  inject: ['formId'],
   name: 'UiInput',
   components: {},
   props: {
@@ -50,7 +51,7 @@ export default defineComponent({
       }
     },
     onSave() {
-      this.$formBus.emit('input:save', new Promise((resolve, reject) => {
+      this.$formBus.emit(`${this.formId}input:save`, new Promise((resolve, reject) => {
         this.error = false;
         if (this.required && (this.modelValue === undefined || this.modelValue === null)) {
           this.error = true;
@@ -69,10 +70,20 @@ export default defineComponent({
     },
   },
   beforeUnmount() {
-    this.$formBus.off('save', this.onSave.bind(this));
+    this.$formBus.off(`${this.formId}save`, this.onSave.bind(this));
   },
   beforeMount() {
-    this.$formBus.on('save', this.onSave.bind(this));
+    this.$formBus.on(`${this.formId}save`, this.onSave.bind(this));
+  },
+  mounted() {
+    console.log(this.formId);
+  },
+  setup() {
+    const formId = inject('formId');
+
+    return {
+      formId,
+    };
   },
 });
 </script>

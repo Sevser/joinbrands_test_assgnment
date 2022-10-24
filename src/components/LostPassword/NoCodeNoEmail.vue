@@ -10,9 +10,15 @@ import { defineComponent } from 'vue';
 import UiInput from '@/components/UiInput.vue';
 import UiButton from '@/components/UiButton.vue';
 import userController from '@/utills/UserController';
+import { createGUID } from '@/utills';
 
 export default defineComponent({
   name: 'NoCodeNoEmail',
+  provide() {
+    return {
+      formId: this.formId,
+    };
+  },
   components: {
     UiInput,
     UiButton,
@@ -20,6 +26,7 @@ export default defineComponent({
   data() {
     return {
       enterEmail: '',
+      formId: createGUID(),
     };
   },
   methods: {

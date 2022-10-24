@@ -24,9 +24,15 @@ import { defineComponent } from 'vue';
 import UiInput from '@/components/UiInput.vue';
 import UiButton from '@/components/UiButton.vue';
 import userManager from '@/utills/UserManager';
+import { createGUID } from '@/utills';
 
 export default defineComponent({
   name: 'SignUp',
+  provide() {
+    return {
+      formId: this.formId,
+    };
+  },
   components: {
     UiButton,
     UiInput,
@@ -39,6 +45,7 @@ export default defineComponent({
     validating: false,
     password: '',
     newPassword: '',
+    formId: createGUID(),
   }),
   computed: {
     showCurrentPassword() {
@@ -56,10 +63,10 @@ export default defineComponent({
     },
     async validate() {
       this.validating = true;
-      this.$formBus.on('input:save', this.handleSaveEvent.bind(this));
-      this.$formBus.emit('save');
+      this.$formBus.on(`${this.formId}input:save`, this.handleSaveEvent.bind(this));
+      this.$formBus.emit(`${this.formId}save`);
       this.wait();
-      this.$formBus.off('input:save', this.handleSaveEvent.bind(this));
+      this.$formBus.off(`${this.formId}input:save`, this.handleSaveEvent.bind(this));
       try {
         await Promise.all(this.validationArray);
       } catch (e) {

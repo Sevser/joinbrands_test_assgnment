@@ -28,9 +28,15 @@ import userController from '@/utills/UserController';
 import userManager from '@/utills/UserManager';
 import UiInput from '@/components/UiInput.vue';
 import UiButton from '@/components/UiButton.vue';
+import { createGUID } from '@/utills';
 
 export default defineComponent({
   name: 'SignUp',
+  provide() {
+    return {
+      formId: this.formId,
+    };
+  },
   components: {
     UiInput,
     UiButton,
@@ -46,6 +52,7 @@ export default defineComponent({
     newPassword: '',
     validationArray: new Array<any>(),
     validating: false,
+    formId: createGUID(),
   }),
   computed: {
     hasEmail() {
