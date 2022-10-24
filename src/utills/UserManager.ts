@@ -22,7 +22,6 @@ class UserManager {
   }
 
   async changePassword({ newPassword, code, password }: { newPassword?: string, code?: string, password?: string }): Promise<IUserControllerResult> {
-    console.log('login', this.user);
     const result = await userController.updatePassword({
       ...this.user,
       newPassword,
@@ -36,7 +35,6 @@ class UserManager {
   }
 
   async login(user: IUserLogin): Promise<IUserControllerResult> {
-    console.log('login', this.user);
     const result = await userController.signIn(user);
     if (result.result && result.data.userInfo !== undefined) {
       this.user = new User(result.data.userInfo);

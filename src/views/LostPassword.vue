@@ -1,18 +1,7 @@
 <template>
   <div class="lost-password-container">
     <div class="body">
-      <div v-if="hasNoData">
-        <UiInput
-          required
-          label="email"
-          v-model="enterEmail"
-          />
-        <UiButton
-          @click="resetPassword"
-        >
-          Восстановить пароль
-        </UiButton>
-      </div>
+      <NoCodeNoEmail v-if="showEnterEmail" />
       <router-link
         v-else-if="hasEmail"
         :to="`/lost-password?code=${code}`">
@@ -24,14 +13,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import UiInput from '@/components/UiInput.vue';
-import UiButton from '@/components/UiButton.vue';
+import NoCodeNoEmail from '@/components/LostPassword/NoCodeNoEmail.vue';
 
 export default defineComponent({
   name: 'SignUp',
   components: {
-    UiInput,
-    UiButton,
+    NoCodeNoEmail,
   },
   props: {
     email: String,
@@ -44,17 +31,11 @@ export default defineComponent({
     hasEmail() {
       return this.email && this.email.length;
     },
-    hasNoData() {
-      return !this.hasEmail
-        && (!this.code || !this.code.length);
+    showEnterEmail() {
+      return this.code === undefined && this.email === undefined;
     },
   },
   methods: {
-    resetPassword() {
-      this.$router.push({
-        path: `/lost-password?email=${this.enterEmail}`,
-      });
-    },
   },
 });
 </script>

@@ -7,6 +7,8 @@ export default class UserRegister implements IUserRegister {
 
   public email: string;
 
+  public id?: number;
+
   public password: string;
 
   public registerCode?: string | undefined;
@@ -21,6 +23,9 @@ export default class UserRegister implements IUserRegister {
       this.activated = user.activated;
     } else {
       this.activated = true;
+    }
+    if (user.id !== undefined) {
+      this.id = user.id;
     }
     if (user.registerCode !== undefined) {
       this.registerCode = user.registerCode;
